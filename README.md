@@ -2,7 +2,7 @@
 
 A REST API for tracking bugs and feature requests inside a dev team. Built with Node.js, TypeScript, Express, and PostgreSQL (no ORM — raw SQL only).
 
-**Live:** https://devpulse-api.vercel.app
+**Live:** https://devpulse-api-assignment.vercel.app
 
 ---
 
@@ -46,19 +46,19 @@ NODE_ENV=development
 
 **Auth**
 
-| Method | Route | Access |
-|--------|-------|--------|
-| POST | `/api/auth/signup` | Public |
-| POST | `/api/auth/login` | Public |
+| Method | Route              | Access |
+| ------ | ------------------ | ------ |
+| POST   | `/api/auth/signup` | Public |
+| POST   | `/api/auth/login`  | Public |
 
 **Issues**
 
-| Method | Route | Access |
-|--------|-------|--------|
-| GET | `/api/issues` | Public |
-| GET | `/api/issues/:id` | Public |
-| POST | `/api/issues` | Authenticated |
-| PATCH | `/api/issues/:id` | Authenticated |
+| Method | Route             | Access          |
+| ------ | ----------------- | --------------- |
+| GET    | `/api/issues`     | Public          |
+| GET    | `/api/issues/:id` | Public          |
+| POST   | `/api/issues`     | Authenticated   |
+| PATCH  | `/api/issues/:id` | Authenticated   |
 | DELETE | `/api/issues/:id` | Maintainer only |
 
 Query params on `GET /api/issues`: `sort` (newest/oldest), `type` (bug/feature_request), `status` (open/in_progress/resolved)
