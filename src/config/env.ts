@@ -8,6 +8,6 @@ if (!process.env.DATABASE_URL || !process.env.JWT_SECRET) {
 export const env = {
   databaseUrl: process.env.DATABASE_URL,
   jwtSecret: process.env.JWT_SECRET,
-  port: Number(process.env.PORT) || 5000,
+  port: process.env.PORT || 5000,
   nodeEnv: process.env.NODE_ENV || "development",
 };
