@@ -6,6 +6,11 @@
   },
   "variable": [
     {
+      "key": "baseUrl",
+      "value": "https://devpulse-api-assignment.vercel.app",
+      "type": "string"
+    },
+    {
       "key": "token",
       "value": "",
       "type": "string"
@@ -35,10 +40,8 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/signup",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5000",
+              "raw": "{{baseUrl}}/api/auth/signup",
+              "host": ["{{baseUrl}}"],
               "path": ["api", "auth", "signup"]
             }
           }
@@ -63,10 +66,8 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/signup",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5000",
+              "raw": "{{baseUrl}}/api/auth/signup",
+              "host": ["{{baseUrl}}"],
               "path": ["api", "auth", "signup"]
             }
           }
@@ -105,10 +106,8 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/login",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5000",
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
               "path": ["api", "auth", "login"]
             }
           }
@@ -123,10 +122,8 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "http://localhost:5000/api/issues?sort=newest",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5000",
+              "raw": "{{baseUrl}}/api/issues?sort=newest",
+              "host": ["{{baseUrl}}"],
               "path": ["api", "issues"],
               "query": [
                 {
@@ -152,10 +149,8 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "http://localhost:5000/api/issues/1",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5000",
+              "raw": "{{baseUrl}}/api/issues/1",
+              "host": ["{{baseUrl}}"],
               "path": ["api", "issues", "1"]
             }
           }
@@ -184,10 +179,8 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/issues",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5000",
+              "raw": "{{baseUrl}}/api/issues",
+              "host": ["{{baseUrl}}"],
               "path": ["api", "issues"]
             }
           }
@@ -216,10 +209,8 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/issues/1",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5000",
+              "raw": "{{baseUrl}}/api/issues/1",
+              "host": ["{{baseUrl}}"],
               "path": ["api", "issues", "1"]
             }
           }
@@ -248,10 +239,8 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/issues/1",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5000",
+              "raw": "{{baseUrl}}/api/issues/1",
+              "host": ["{{baseUrl}}"],
               "path": ["api", "issues", "1"]
             }
           }
@@ -267,10 +256,8 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:5000/api/issues/1",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5000",
+              "raw": "{{baseUrl}}/api/issues/1",
+              "host": ["{{baseUrl}}"],
               "path": ["api", "issues", "1"]
             }
           }
