@@ -2,11 +2,23 @@ import pgPool from "../../config/database";
 import {
   Issue,
   IssueWithReporter,
-  ReporterInfo,
   CreateIssueBody,
   UpdateIssueBody,
   GetIssuesQuery,
 } from "../../types";
+
+interface IssueJoinRow extends Issue {
+  reporter_name: string;
+  reporter_role: "contributor" | "maintainer";
+}
+
+const toIssueWithReporter = (row: IssueJoinRow): IssueWithReporter => {
+  const { reporter_id, reporter_name, reporter_role, ...rest } = row;
+  return {
+    ...rest,
+    reporter: { id: reporter_id, name: reporter_name, role: reporter_role },
+  };
+};
 
 export const createIssue = async (
   data: CreateIssueBody & { reporter_id: number },
@@ -18,30 +30,7 @@ export const createIssue = async (
      RETURNING *`,
     [title, description, type, reporter_id],
   );
-  return result?.rows?.[0] || null;
-};
-
-const attachReporters = async (
-  issues: Issue[],
-): Promise<IssueWithReporter[]> => {
-  if (issues?.length === 0) return [];
-
-  const reporterIds = [...new Set(issues?.map((i) => i.reporter_id))];
-  const usersResult = await pgPool.query<ReporterInfo>(
-    "SELECT id, name, role FROM users WHERE id = ANY($1)",
-    [reporterIds],
-  );
-
-  const userMap = new Map(usersResult?.rows?.map((u) => [u.id, u]));
-
-  return issues.map(({ reporter_id, ...rest }) => ({
-    ...rest,
-    reporter: userMap.get(reporter_id) ?? {
-      id: reporter_id,
-      name: "Unknown",
-      role: "contributor" as const,
-    },
-  }));
+  return result.rows[0];
 };
 
 export const getAllIssues = async (
@@ -53,11 +42,11 @@ export const getAllIssues = async (
   let paramCount = 1;
 
   if (type) {
-    conditions.push(`type = $${paramCount++}`);
+    conditions.push(`i.type = $${paramCount++}`);
     params.push(type);
   }
   if (status) {
-    conditions.push(`status = $${paramCount++}`);
+    conditions.push(`i.status = $${paramCount++}`);
     params.push(status);
   }
 
@@ -65,24 +54,32 @@ export const getAllIssues = async (
     conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
   const order = sort === "oldest" ? "ASC" : "DESC";
 
-  const result = await pgPool.query<Issue>(
-    `SELECT * FROM issues ${where} ORDER BY created_at ${order}`,
+  const result = await pgPool.query<IssueJoinRow>(
+    `SELECT i.id, i.title, i.description, i.type, i.status, i.reporter_id, i.created_at, i.updated_at,
+            u.name AS reporter_name, u.role AS reporter_role
+     FROM issues i
+     LEFT JOIN users u ON i.reporter_id = u.id
+     ${where}
+     ORDER BY i.created_at ${order}`,
     params,
   );
 
-  return attachReporters(result.rows);
+  return result.rows.map(toIssueWithReporter);
 };
 
 export const getIssueById = async (
   id: number,
 ): Promise<IssueWithReporter | null> => {
-  const result = await pgPool.query<Issue>(
-    "SELECT * FROM issues WHERE id = $1",
+  const result = await pgPool.query<IssueJoinRow>(
+    `SELECT i.id, i.title, i.description, i.type, i.status, i.reporter_id, i.created_at, i.updated_at,
+            u.name AS reporter_name, u.role AS reporter_role
+     FROM issues i
+     LEFT JOIN users u ON i.reporter_id = u.id
+     WHERE i.id = $1`,
     [id],
   );
-  if (!result?.rows?.[0]) return null;
-  const [issue] = await attachReporters([result.rows[0]]);
-  return issue;
+  if (!result.rows[0]) return null;
+  return toIssueWithReporter(result.rows[0]);
 };
 
 export const getIssueRawById = async (id: number): Promise<Issue | null> => {
@@ -90,7 +87,7 @@ export const getIssueRawById = async (id: number): Promise<Issue | null> => {
     "SELECT * FROM issues WHERE id = $1",
     [id],
   );
-  return result?.rows?.[0] || null;
+  return result.rows[0] || null;
 };
 
 export const updateIssue = async (
@@ -127,10 +124,10 @@ export const updateIssue = async (
     `UPDATE issues SET ${fields.join(", ")} WHERE id = $${paramCount} RETURNING *`,
     params,
   );
-  return result?.rows?.[0] || null;
+  return result.rows[0] || null;
 };
 
 export const deleteIssue = async (id: number): Promise<boolean> => {
   const result = await pgPool.query("DELETE FROM issues WHERE id = $1", [id]);
-  return (result?.rowCount ?? 0) > 0;
+  return (result.rowCount ?? 0) > 0;
 };

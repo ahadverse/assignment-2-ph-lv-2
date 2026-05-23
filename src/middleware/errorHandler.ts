@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
+import { sendError } from "../utils/response";
 
 export class AppError extends Error {
   statusCode: number;
@@ -20,26 +21,16 @@ export const errorHandler = (
   _next: NextFunction,
 ) => {
   if (err instanceof AppError) {
-    res.status(err.statusCode).json({
-      success: false,
-      message: err.message,
-      ...(err.errors !== undefined && { errors: err.errors }),
-    });
+    sendError(res, err.statusCode, err.message, err.errors);
     return;
   }
 
   if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
-    res.status(StatusCodes.UNAUTHORIZED).json({
-      success: false,
-      message: "Invalid token or expired token",
-    });
+    sendError(res, StatusCodes.UNAUTHORIZED, "Invalid token or expired token");
     return;
   }
 
   console.error(JSON.stringify(err, Object.getOwnPropertyNames(err)));
 
-  res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-    success: false,
-    message: "Something went wrong!!!",
-  });
+  sendError(res, StatusCodes.INTERNAL_SERVER_ERROR, "Something went wrong !!!");
 };

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevPulse API</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px;
+    }
+
+    .container { width: 100%; max-width: 760px; }
+
+    header { margin-bottom: 48px; }
+
+    .badge {
+      display: inline-block;
+      background: #238636;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    h1 { font-size: 36px; font-weight: 700; letter-spacing: -.5px; margin-bottom: 10px; }
+
+    .subtitle { color: #8b949e; font-size: 15px; line-height: 1.6; }
+
+    .divider { border: none; border-top: 1px solid #21262d; margin: 40px 0; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #8b949e;
+      margin-bottom: 16px;
+    }
+
+    .endpoint-group { margin-bottom: 32px; }
+
+    .group-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #8b949e;
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    .endpoint {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      transition: border-color .15s;
+    }
+
+    .endpoint:hover { border-color: #388bfd; }
+
+    .method {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      width: 52px;
+      text-align: center;
+      padding: 3px 0;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .get    { background: #0d419d22; color: #388bfd; }
+    .post   { background: #23863622; color: #3fb950; }
+    .patch  { background: #9e6a0322; color: #d29922; }
+    .delete { background: #da363322; color: #f85149; }
+
+    .path { font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; color: #e6edf3; flex: 1; }
+
+    .access {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+
+    .public     { background: #21262d; color: #8b949e; }
+    .auth       { background: #0d419d33; color: #79c0ff; }
+    .maintainer { background: #6e40c933; color: #d2a8ff; }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 9px 18px;
+      background: #238636;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 6px;
+      border: 1px solid #2ea043;
+      transition: background .15s, border-color .15s;
+    }
+
+    .download-btn:hover { background: #2ea043; border-color: #3fb950; }
+
+    footer { margin-top: 56px; text-align: center; font-size: 12px; color: #484f58; }
+    footer span { color: #58a6ff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">v1.0</div>
+      <h1>DevPulse API</h1>
+      <p class="subtitle">Internal tech issue &amp; feature tracker for software teams.<br/>Built with Node.js, TypeScript, Express, and PostgreSQL.</p>
+      <a class="download-btn" href="/download/postman">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"/><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.97a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.97Z"/></svg>
+        Download Postman Collection
+      </a>
+    </header>
+
+    <hr class="divider" />
+
+    <p class="section-title">Endpoints</p>
+
+    <div class="endpoint-group">
+      <p class="group-label">Auth</p>
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="path">/api/auth/signup</span>
+        <span class="access public">Public</span>
+      </div>
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="path">/api/auth/login</span>
+        <span class="access public">Public</span>
+      </div>
+    </div>
+
+    <div class="endpoint-group">
+      <p class="group-label">Issues</p>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/issues</span>
+        <span class="access public">Public</span>
+      </div>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/issues/:id</span>
+        <span class="access public">Public</span>
+      </div>
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="path">/api/issues</span>
+        <span class="access auth">Authenticated</span>
+      </div>
+      <div class="endpoint">
+        <span class="method patch">PATCH</span>
+        <span class="path">/api/issues/:id</span>
+        <span class="access auth">Authenticated</span>
+      </div>
+      <div class="endpoint">
+        <span class="method delete">DELETE</span>
+        <span class="path">/api/issues/:id</span>
+        <span class="access maintainer">Maintainer only</span>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <footer>Powered by <span>Node.js</span> &middot; <span>Express</span> &middot; <span>PostgreSQL</span></footer>
+  </div>
+</body>
+</html>
